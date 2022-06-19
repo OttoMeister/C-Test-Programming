@@ -6,22 +6,23 @@
 // "C:\Program Files\Notepad++\notepad++.exe"  C:\MinGW\sudoku.c
 // gcc -o sudoku C:\MinGW\sudoku.c && sudoku.exe
 
-// https://onlinegdb.com/FQlRP_4Q3
+// https://onlinegdb.com/77mBfmjBCT
 // https://www.geeksforgeeks.org/sudoku-backtracking-7
 // https://developpaper.com/source-code-of-solving-sudoku-program-in-c-language/
 // https://formatter.org/cpp-formatter
 
 #include <stdio.h>
 #include <stdlib.h>
-static unsigned long long deep = 0;
+static unsigned long deep = 0;
 
 #define RED "\x1B[31m"
 #define NRM "\x1B[0m"
 
-#define SUNR 12
+#define SUNR 3
 
 // Checks whether it will be legal to assign num to the given row, col
-int isSafe(int grid[9][9], int row, int col, int num) {
+int num_safe(int grid[9][9], int row, int col, int num) {
+  deep++;
   // Check if we find the same num in the similar row
   for (int i = 0; i < 9; i++)
     if (grid[row][i] == num) return 0;
@@ -37,72 +38,142 @@ int isSafe(int grid[9][9], int row, int col, int num) {
 }
 
 //If on one position only on number posible we fond it!
-int unique(int grid[9][9]) {
-  int hit_num, hit_count, found;
-  do {
-    found = 0;
+int find1(int grid[9][9]) {
+  int hit_num, hit_count, found_cnt=0;
     for (int row = 0; row < 9; row++)
       for (int col = 0; col < 9; col++) {
         hit_num = 0;
         hit_count = 0;
         if (!grid[row][col]) {
           for (int num = 1; num < 10; num++)
-            if (isSafe(grid, row, col, num)) {
+            if (num_safe(grid, row, col, num)) {
               hit_num = num;
               hit_count++;
-              deep++;
             }
           if (hit_count == 1) {
-            printf("Treffer auf %i-%i mit %i mit Regel 1\n", 
-              row + 1, col + 1, hit_num);
+              //printf("Hit on row %i, column %i with rule1\n",row + 1, col + 1);
             grid[row][col] = hit_num;
-            found++;
+            found_cnt++;
           }
         }
       }
-  } while (found);
+return found_cnt;
+}
+
+// find a number in the line that is missing and legally possible only once
+int find2(int grid[9][9]) {
+  int hit_count, found, hit_col, found_cnt=0;
+  for (int num = 1; num < 10; num++) {
+    for (int row = 0; row < 9; row++) {
+      found = 0;
+      hit_col = 0;
+      hit_count = 0;
+      // we check if the number we are looking for is already in the line
+      for (int col = 0; col < 9; col++)
+        if (grid[row][col] == num) found++;
+      // Only if the line does not have the searched number
+      if (found == 0)
+        for (int col = 0; col < 9; col++)
+          if (grid[row][col] == 0)
+            if (num_safe(grid, row, col, num)) {
+              hit_col = col;
+              hit_count++;
+            }
+      // Only if the searched number is possible once
+      if (hit_count == 1) {
+        grid[row][hit_col] = num;
+        found_cnt++;
+        //printf("Hit on row %i, column %i with rule 2\n", row + 1, hit_col + 1);
+      }
+    }
+  }
+  return found_cnt;
+}
+
+// find a number in the column that is missing and legally possible only once
+int find3(int grid[9][9]) {
+  int hit_count, found, hit_row, found_cnt=0;
+  for (int num = 1; num < 10; num++) {
+    for (int col = 0; col < 9; col++) {
+      found = 0;
+      hit_row = 0;
+      hit_count = 0;
+      // we check if the searched number is already in the column
+      for (int row = 0; row < 9; row++)
+        if (grid[row][col] == num) found++;
+      // Only if the column does not have the searched number
+      if (found == 0)
+        for (int row = 0; row < 9; row++)
+          if (grid[row][col] == 0)
+            if (num_safe(grid, row, col, num)) {
+              hit_row = row;
+              hit_count++;
+            }
+      // Only if the searched number is possible once
+      if (hit_count == 1) {
+        grid[hit_row][col] = num;
+        found_cnt++;
+        //printf("Hit on row %i, column %i with rule 3\n", hit_row + 1, col + 1);
+      }
+    }
+  }
+  return found_cnt;
 }
 
 
+// find a number in the group that is missing and legally possible only once
+int find4(int grid[9][9]) {
+  int hit_count, found, hit_row, hit_col, hit_elm, found_cnt = 0, row, col;
+  for (int num = 1; num < 10; num++) {
+    for (int grp = 0; grp < 9; grp++) {
+      found = 0;
+      hit_count = 0;
+      // we check if the number we are looking for is already in the column
+      for (int row_tmp = 0; row_tmp < 3; row_tmp++)
+        for (int elm = 0; elm < 9; elm++) {
+          row = elm / 3 + grp / 3 * 3;
+          col = elm % 3 + grp % 3 * 3;
+          if (grid[row][col] == num) found++;
+          // printf("Group %i, element %i = row %i, column %i\n",grp+1,
+          // elm+1, row+1, col+1);
+        }
+      // Only if the group does not have the number you are looking for
+      if (found == 0)
+        for (int elm = 0; elm < 9; elm++) {
+          row = elm / 3 + grp / 3 * 3;
+          col = elm % 3 + grp % 3 * 3;
+          if (grid[row][col] == 0)
+            if (num_safe(grid, row, col, num)) {
+              hit_row = row;
+              hit_col = col;
+              hit_elm = elm;
+              hit_count++;
+            }
+        }
+      // Only if the searched number is possible once
+      if (hit_count == 1) {
+        grid[hit_row][hit_col] = num;
+        found_cnt++;
+        // printf("Hit on group %i, element %i with rule 4\n", grp + 1,hit_elm + 1);
+      }
+    }
+  }
+  return found_cnt;
+}
 
-
-
-
-
-
-// Takes a partially filled-in grid and attempts to assign
-// values to all unassigned locations in such a way to meet
-// the requirements for Sudoku solution (non-duplication
-// across rows, columns, and boxes)
-int solveSudoku(int grid[9][9], int row, int col) {
+int solve(int grid[9][9], int row, int col) {
   deep++;
-  // Check if we have reached the 8thbrow and 9th column (0
-  // indexed matrix) we are returning true to avoid further
-  // backtracking
   if (row == 8 && col == 9) return 1;
-  // Check if column value  becomes 9 ,we move to next row
-  // and column start from 0
   if (col == 9) {
     row++;
     col = 0;
   }
-  // Check if the current position of the grid already
-  // contains value >0, we iterate for next column
-  if (grid[row][col] > 0) return solveSudoku(grid, row, col + 1);
+  if (grid[row][col] > 0) return solve(grid, row, col + 1);
   for (int num = 1; num <= 9; num++) {
-    // Check if it is safe to place the num (1-9) in the
-    // given row ,col  ->we move to next column
-    if (isSafe(grid, row, col, num)) {
-      // Assigning the num in the current (row,col) position
-      // of the grid and assuming our assigned num in the
-      // position is correct
+    if (num_safe(grid, row, col, num)) {
       grid[row][col] = num;
-      // Checking for next possibility with next column
-      if (solveSudoku(grid, row, col + 1)) return 1;
+      if (solve(grid, row, col + 1)) return 1;
     }
-    // Removing the assigned num ,since our assumption was
-    // wrong , and we go for next assumption with diff num
-    // value
     grid[row][col] = 0;
   }
   return 0;
@@ -112,7 +183,7 @@ int solveSudoku(int grid[9][9], int row, int col) {
 void print(int arr1[9][9], int arr2[9][9]) {
 #ifdef _WIN32
   system("Color");
-#endif  // Windows
+#endif  
   for (int i = 0; i < 9; i++) {
     if (i % 3 == 0) printf("+------+------+------+\n");
     for (int ii = 0; ii < 9; ii++) {
@@ -131,7 +202,7 @@ int main() {
   int gridbuf1[9][9];
   int gridbuf2[9][9];
   int grids[13][9][9] =
-      // sudoku 00 mit 392 Rekursionstiefe
+      // sudoku 00 with 392 recursion depth
       {{{0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 2
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 3
@@ -141,7 +212,7 @@ int main() {
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 7
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 8
         {0, 0, 0, 0, 0, 0, 0, 0, 0}},  // Zeile 9
-       // sudoku 01 mit 126776 Rekursionstiefe (keine einfache Lösung)
+       // sudoku 01 with 126776 recursion depth (no easy solution)
        {{0, 9, 0, 0, 0, 0, 0, 0, 0},   // Zeile 1
         {0, 0, 0, 0, 0, 0, 4, 6, 0},   // Zeile 2
         {2, 0, 0, 0, 0, 0, 0, 0, 5},   // Zeile 3
@@ -151,7 +222,7 @@ int main() {
         {0, 1, 0, 7, 3, 0, 0, 2, 0},   // Zeile 7
         {9, 0, 8, 0, 5, 0, 0, 0, 0},   // Zeile 8
         {0, 0, 0, 2, 0, 0, 0, 0, 0}},  // Zeile 9
-       // sudoku 02 mit 914 Rekursionstiefe (keine einfache Lösung)
+       // sudoku 02 with 914 recursion depth (no easy solution)
        {{2, 0, 7, 0, 3, 8, 1, 0, 0},   // Zeile 1
         {0, 8, 3, 0, 0, 0, 2, 7, 0},   // Zeile 2
         {0, 0, 0, 5, 2, 7, 3, 0, 8},   // Zeile 3
@@ -161,7 +232,7 @@ int main() {
         {0, 0, 0, 0, 5, 3, 9, 2, 0},   // Zeile 7
         {0, 0, 5, 2, 0, 0, 8, 1, 0},   // Zeile 8
         {4, 2, 0, 0, 8, 0, 5, 3, 0}},  // Zeile 9
-       // sudoku 03 mit 300 Rekursionstiefe (einfach)
+       // sudoku 03 with 300 recursion depth (simple)
        {{0, 0, 5, 0, 0, 0, 6, 7, 1},   // Zeile 1
         {0, 0, 6, 0, 0, 4, 0, 0, 0},   // Zeile 2
         {0, 7, 0, 5, 0, 9, 0, 0, 2},   // Zeile 3
@@ -171,7 +242,7 @@ int main() {
         {7, 9, 8, 4, 0, 0, 0, 0, 0},   // Zeile 7
         {0, 2, 0, 9, 0, 0, 1, 3, 0},   // Zeile 8
         {1, 5, 3, 0, 0, 2, 0, 9, 4}},  // Zeile 9
-       // sudoku 04 mit 1953136 Rekursionstiefe (keine einfache Lösung)
+       // sudoku 04 with 1953136 recursion depth (no easy solution)
        {{0, 0, 0, 0, 0, 0, 0, 0, 1},   // Zeile 1
         {0, 0, 0, 8, 0, 0, 0, 0, 0},   // Zeile 2
         {3, 0, 0, 7, 6, 0, 0, 0, 0},   // Zeile 3
@@ -181,7 +252,7 @@ int main() {
         {0, 0, 0, 0, 4, 0, 3, 2, 0},   // Zeile 7
         {0, 0, 0, 0, 0, 9, 0, 0, 8},   // Zeile 8
         {0, 5, 0, 0, 0, 0, 0, 0, 0}},  // Zeile 9
-       // sudoku 05 mit 2553 Rekursionstiefe (keine einfache Lösung)
+       // sudoku 05 with 2553 recursion depth (simple solution)
        {{9, 2, 0, 0, 0, 0, 0, 0, 0},   // Zeile 1
         {0, 0, 0, 0, 3, 8, 0, 0, 2},   // Zeile 2
         {0, 4, 0, 0, 0, 6, 0, 0, 0},   // Zeile 3
@@ -191,7 +262,7 @@ int main() {
         {8, 6, 4, 0, 5, 0, 1, 0, 0},   // Zeile 7
         {0, 5, 9, 0, 6, 0, 0, 8, 0},   // Zeile 8
         {0, 3, 7, 8, 0, 0, 0, 6, 0}},  // Zeile 9
-       // sudoku 06 mit 82 Rekursionstiefe (einfach)
+       // sudoku 06 with 82 recursion depth (simple)
        {{3, 1, 6, 5, 7, 8, 4, 9, 2},   // Zeile 1
         {5, 2, 9, 1, 3, 4, 7, 6, 8},   // Zeile 2
         {4, 8, 7, 6, 2, 9, 5, 3, 1},   // Zeile 3
@@ -201,7 +272,7 @@ int main() {
         {1, 3, 8, 0, 4, 7, 2, 0, 6},   // Zeile 7
         {6, 9, 2, 3, 5, 1, 8, 7, 4},   // Zeile 8
         {7, 4, 5, 0, 8, 6, 3, 1, 0}},  // Zeile 9
-       // sudoku 07 mit 1149 Rekursionstiefe (keine einfache Lösung)
+       // sudoku 07 with 1149 recursion depth (simple solution)
        {{3, 0, 6, 5, 0, 8, 4, 0, 0},   // Zeile 1
         {5, 2, 0, 0, 0, 0, 0, 0, 0},   // Zeile 2
         {0, 8, 7, 0, 0, 0, 0, 3, 1},   // Zeile 3
@@ -211,7 +282,7 @@ int main() {
         {1, 3, 0, 0, 0, 0, 2, 5, 0},   // Zeile 7
         {0, 0, 0, 0, 0, 0, 0, 7, 4},   // Zeile 8
         {0, 0, 5, 2, 0, 6, 3, 0, 0}},  // Zeile 9
-       // sudoku 08 mit 14578 Rekursionstiefe (keine einfache Lösung)
+        //sudoku 08 with 14578 recursion depth (no easy solution)
        {{0, 0, 5, 3, 0, 0, 0, 0, 0},   // Zeile 1
         {8, 0, 0, 0, 0, 0, 0, 2, 0},   // Zeile 2
         {0, 7, 0, 0, 1, 0, 5, 0, 0},   // Zeile 3
@@ -221,7 +292,7 @@ int main() {
         {0, 6, 0, 5, 0, 0, 0, 0, 9},   // Zeile 7
         {0, 0, 4, 0, 0, 0, 0, 3, 0},   // Zeile 8
         {0, 0, 0, 0, 0, 9, 7, 0, 0}},  // Zeile 9
-       // sudoku 09 mit 451243 Rekursionstiefe (keine einfache Lösung)
+       // sudoku 09 with 451243 recursion depth (no easy solution)
        {{0, 0, 0, 0, 0, 6, 0, 0, 0},   // Zeile 1
         {0, 5, 9, 0, 0, 0, 0, 0, 8},   // Zeile 2
         {2, 0, 0, 0, 0, 8, 0, 0, 0},   // Zeile 3
@@ -231,7 +302,7 @@ int main() {
         {0, 0, 0, 3, 2, 5, 0, 0, 6},   // Zeile 7
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 8
         {0, 0, 0, 0, 0, 0, 0, 0, 0}},  // Zeile 9
-       // sudoku 10 mit  3390563007 Rekursionstiefe (keine LC6sung)
+       // sudoku 10 with 3390563007 recursion depth (no solution!)
        {{0, 0, 0, 0, 0, 5, 0, 8, 0},    // Zeile 1
         {0, 0, 0, 6, 0, 1, 0, 4, 3},    // Zeile 2
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 3
@@ -241,7 +312,7 @@ int main() {
         {5, 3, 0, 0, 0, 0, 0, 6, 1},    // Zeile 7
         {0, 0, 0, 0, 0, 0, 0, 0, 4},    // Zeile 8
         {0, 0, 0, 0, 0, 0, 0, 0, 0}},   // Zeile 9
-                                        // sudoku 11 mit 392 Rekursionstiefe
+        // sudoku 11 with 392 recursion depth (placeholder)
        {{0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 2
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 3
@@ -251,7 +322,7 @@ int main() {
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 7
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 8
         {0, 0, 0, 0, 0, 0, 0, 0, 0}},   // Zeile 9
-                                       // sudoku 12 mit ? Rekursionstiefe
+        // sudoku 12 with 73414 tries (simple solution)
        {{0, 0, 0, 4, 0, 0, 2, 0, 1},    // Zeile 1
         {9, 0, 0, 0, 0, 3, 8, 0, 0},    // Zeile 2
         {0, 0, 0, 0, 0, 0, 0, 7, 5},    // Zeile 3
@@ -261,30 +332,46 @@ int main() {
         {0, 0, 0, 2, 0, 0, 7, 9, 0},    // Zeile 7
         {0, 2, 0, 0, 0, 4, 5, 0, 0},    // Zeile 8
         {0, 6, 0, 0, 0, 5, 0, 1, 0}}};  // Zeile 9
+  
+//Init  
   for (int i = 0; i < 9; i++)
     for (int ii = 0; ii < 9; ii++) {
       gridbuf1[i][ii] = grids[SUNR][i][ii];
       gridbuf2[i][ii] = grids[SUNR][i][ii];
     }
 
-  unique(gridbuf2);
+//Simple solution attempt
+  while(find1(gridbuf2)||find2(gridbuf2)||find3(gridbuf2)||find4(gridbuf2)); 
   print(gridbuf1, gridbuf2);
-  printf("Sudoku %i hat %lld Rekursionstiefe\n", SUNR, deep);
-
+  printf("Sudoku %i had %ld tests\n", SUNR, deep);
+  int no_solution = 0, solutions = 0;
+  for (int i = 0; i < 9; i++)
+    for (int ii = 0; ii < 9; ii++) {
+      if (gridbuf2[i][ii] == 0) no_solution++;
+      if (gridbuf2[i][ii] != gridbuf1[i][ii]) solutions++;
+    }    
+  if (no_solution){
+    printf("No full solution found\n");
+    if (solutions)
+    printf("but %i new numbers found\n\n",solutions );  
+    else printf("\n");
+  }
+  else printf("\n");  
+  
+//Init
   for (int i = 0; i < 9; i++)
     for (int ii = 0; ii < 9; ii++) {
       gridbuf1[i][ii] = grids[SUNR][i][ii];
       gridbuf2[i][ii] = grids[SUNR][i][ii];
     }
 
+// Complete soluti  
   deep = 0;
-
-  if (solveSudoku(gridbuf2, 0, 0) == 1)
+  if (solve(gridbuf2, 0, 0) == 1)
     print(gridbuf1, gridbuf2);
   else
     printf("No solution exists\n");
-  printf("Sudoku %i hat %lld Rekursionstiefe\n", SUNR, deep);
+  printf("Sudoku %i had %ld tests\n", SUNR, deep);
   return 0;
 }
-
 
