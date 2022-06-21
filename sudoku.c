@@ -1,5 +1,5 @@
 // LINUX
-// gcc -o sudoku sudoku.c && ./sudoku
+// gcc -Wall -Wextra -O3 sudoku.c -o sudoku && ./sudoku
 
 // WINDOWS - https://mingw.osdn.io
 // path %PATH%;C:\MinGW\bin
@@ -18,7 +18,7 @@ static unsigned long deep = 0;
 #define RED "\x1B[31m"
 #define NRM "\x1B[0m"
 
-#define SUNR 1
+#define SUNR 12
 
 // Mix from 0-8
 void mix(int buf[9]) {
@@ -43,39 +43,41 @@ int num_safe(int sudoku[9][9], int row, int col, int num) {
   // Check if we find the same num in the particular 3*3 matrix
   int startRow = row - row % 3, startCol = col - col % 3;
   for (int i = 0; i < 3; i++)
-    for (int ii = 0; ii < 3; ii++)
+    for (int ii= 0; ii < 3; ii++)
       if (sudoku[i + startRow][ii + startCol] == num) return 0;
   return 1;
 }
 
-//If on one position only on number posible we fond it!
+// If on one position only on number posible we fond it!
 int find1(int sudoku[9][9]) {
-  int hit_num, hit_count, found_cnt=0;
+  int hit_num, hit_count, found_cnt = 0;
   int buf[3][9];
   mix(buf[0]);
-  for (int rowmix = 0; rowmix < 9; rowmix++){ 
-    int row=buf[0][rowmix]; 
-      mix(buf[1]);
-      for (int colmix = 0; colmix < 9; colmix++) {
-        int col=buf[1][colmix]; 
-        hit_num = 0;
-        hit_count = 0;
-        if (!sudoku[row][col]) {
-          mix(buf[2]);
-          for (int nummix = 1; nummix < 10; nummix++){
-            int num=1+buf[2][nummix-1]; //mixer from 0-8
-            if (num_safe(sudoku, row, col, num)) {
-              hit_num = num;
-              hit_count++;
-            }}
-          if (hit_count == 1) {
-              printf("Hit on row %i, column %i with rule 1\n",row + 1, col + 1);
-            sudoku[row][col] = hit_num;
-            found_cnt++;
+  for (int rowmix = 0; rowmix < 9; rowmix++) {
+    int row = buf[0][rowmix];
+    mix(buf[1]);
+    for (int colmix = 0; colmix < 9; colmix++) {
+      int col = buf[1][colmix];
+      hit_num = 0;
+      hit_count = 0;
+      if (!sudoku[row][col]) {
+        mix(buf[2]);
+        for (int nummix = 1; nummix < 10; nummix++) {
+          int num = 1 + buf[2][nummix - 1];  // mixer from 0-8
+          if (num_safe(sudoku, row, col, num)) {
+            hit_num = num;
+            hit_count++;
           }
         }
-      }}
-return found_cnt;
+        if (hit_count == 1) {
+          printf("Hit on row %i, column %i with rule 1\n", row + 1, col + 1);
+          sudoku[row][col] = hit_num;
+          found_cnt++;
+        }
+      }
+    }
+  }
+  return found_cnt;
 }
 
 // find a number in the line that is missing and legally possible only once
@@ -115,8 +117,7 @@ int find2(int sudoku[9][9]) {
 
 // find a number in the column that is missing and legally possible only once
 int find3(int sudoku[9][9]) {
-  int hit_count, found, hit_row, found_cnt=0;
-  
+  int hit_count, found, hit_row, found_cnt=0; 
   int buf[3][9];
   mix(buf[0]);
   for (int nummix = 1; nummix < 10; nummix++){
@@ -197,10 +198,7 @@ int find4(int sudoku[9][9]) {
 int solve(int sudoku[9][9], int row, int col) {
   deep++;
   if (row == 8 && col == 9) return 1;
-  if (col == 9) {
-    row++;
-    col = 0;
-  }
+  if (col == 9) { row++; col = 0; }  
   if (sudoku[row][col] > 0) return solve(sudoku, row, col + 1);
   for (int num = 1; num <= 9; num++) {
     if (num_safe(sudoku, row, col, num)) {
@@ -212,29 +210,49 @@ int solve(int sudoku[9][9], int row, int col) {
   return 0;
 }
 
+
+#ifdef __linux__ 
 // function to print sudoku
 void print(int arr1[9][9], int arr2[9][9]) {
-#ifdef _WIN32
+  printf("┏━━━┯━━━┯━━━┳━━━┯━━━┯━━━┳━━━┯━━━┯━━━┓\n");
+  for (int row = 0; row < 9; row++) {
+    for (int col = 0; col < 9; col++) {
+      if (col %3)  printf("│");
+      else printf("┃");
+      if (arr1[row][col]) printf(RED "%2d " NRM, arr1[row][col]);
+      else if (arr2[row][col]) printf("%2d ", arr2[row][col]);
+      else printf("   ");
+    }
+    printf("┃\n");
+    if (row % 3 != 2) printf("┠───┼───┼───╂───┼───┼───╂───┼───┼───┨\n");
+    if (row == 2 || row == 5) printf("┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫\n");
+  }
+  printf("┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛\n");
+}
+#else  //__linux__ 
+// function to print sudoku
+void print(int arr1[9][9], int arr2[9][9]) {
+#ifdef _WIN32 
   system("Color");
-#endif  
-  for (int i = 0; i < 9; i++) {
-    if (i % 3 == 0) printf("+------+------+------+\n");
-    for (int ii = 0; ii < 9; ii++) {
-      if (ii % 3 == 0) putchar('|');
-      if (arr1[i][ii])
-        printf(RED "%2d" NRM, arr1[i][ii]);
-      else
-        printf("%2d", arr2[i][ii]);
+#endif //_WIN32  
+  for (int row = 0; row < 9; row++) {
+    if (row % 3 == 0) printf("+------+------+------+\n");
+    for (int col = 0; col < 9; col++) {
+      if (col % 3 == 0) putchar('|');
+      if (arr1[row][col]) printf(RED "%2d" NRM, arr1[row][col]);
+      else if (arr2[row][col]) printf("%2d", arr2[row][col]);
+      else printf(" -");
     }
     printf("|\n");
   }
   printf("+------+------+------+\n");
 }
+#endif //__linux__ 
 
 int main() {
   int sudokubuf1[9][9];
   int sudokubuf2[9][9];
-  int sudoku[13][9][9] =
+  int sudoku[14][9][9] =
       // sudoku 00 with 392 recursion depth
       {{{0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 2
@@ -355,7 +373,17 @@ int main() {
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 7
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 8
         {0, 0, 0, 0, 0, 0, 0, 0, 0}},   // Zeile 9
-        // sudoku 12 with 73414 tries (simple solution)
+        // sudoku 12
+       {{0, 0, 0, 0, 0, 0, 0, 9, 0},
+        {1, 9, 0, 4, 7, 0, 6, 0, 8},
+        {0, 5, 2, 8, 1, 9, 4, 0, 7},
+        {2, 0, 0, 0, 4, 8, 0, 0, 0},
+        {0, 0, 9, 0, 0, 0, 5, 0, 0},
+        {0, 0, 0, 7, 5, 0, 0, 0, 9},
+        {9, 0, 7, 3, 6, 4, 1, 8, 0},
+        {5, 0, 6, 0, 8, 1, 0, 7, 4},
+        {0, 8, 0, 0, 0, 0, 0, 0, 0}},  
+        // sudoku 13 with 73414 tries (simple solution)
        {{0, 0, 0, 4, 0, 0, 2, 0, 1},    // Zeile 1
         {9, 0, 0, 0, 0, 3, 8, 0, 0},    // Zeile 2
         {0, 0, 0, 0, 0, 0, 0, 7, 5},    // Zeile 3
@@ -370,9 +398,9 @@ int main() {
   srand(time(NULL));  
 //Init  
   for (int i = 0; i < 9; i++)
-    for (int ii = 0; ii < 9; ii++) {
-      sudokubuf1[i][ii] = sudoku[SUNR][i][ii];
-      sudokubuf2[i][ii] = sudoku[SUNR][i][ii];
+    for (int col = 0; col < 9; col++) {
+      sudokubuf1[i][col] = sudoku[SUNR][i][col];
+      sudokubuf2[i][col] = sudoku[SUNR][i][col];
     }
 
 //Simple solution attempt
@@ -382,9 +410,9 @@ int main() {
   printf("Sudoku %i had %ld tests\n", SUNR, deep);
   int no_solution = 0, solutions = 0;
   for (int i = 0; i < 9; i++)
-    for (int ii = 0; ii < 9; ii++) {
-      if (sudokubuf2[i][ii] == 0) no_solution++;
-      if (sudokubuf2[i][ii] != sudokubuf1[i][ii]) solutions++;
+    for (int col = 0; col < 9; col++) {
+      if (sudokubuf2[i][col] == 0) no_solution++;
+      if (sudokubuf2[i][col] != sudokubuf1[i][col]) solutions++;
     }    
   if (no_solution){
     printf("No full solution found\n");
@@ -396,9 +424,9 @@ int main() {
   
 //Init
   for (int i = 0; i < 9; i++)
-    for (int ii = 0; ii < 9; ii++) {
-      sudokubuf1[i][ii] = sudoku[SUNR][i][ii];
-      sudokubuf2[i][ii] = sudoku[SUNR][i][ii];
+    for (int col = 0; col < 9; col++) {
+      sudokubuf1[i][col] = sudoku[SUNR][i][col];
+      sudokubuf2[i][col] = sudoku[SUNR][i][col];
     }
 
 // Complete solution  
