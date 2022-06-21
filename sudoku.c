@@ -6,7 +6,7 @@
 // "C:\Program Files\Notepad++\notepad++.exe"  C:\MinGW\sudoku.c
 // gcc -o sudoku C:\MinGW\sudoku.c && sudoku.exe
 
-// https://onlinegdb.com/77mBfmjBCT
+// https://onlinegdb.com/Z-Y9bD_Zo
 // https://www.geeksforgeeks.org/sudoku-backtracking-7
 // https://developpaper.com/source-code-of-solving-sudoku-program-in-c-language/
 // https://formatter.org/cpp-formatter
@@ -32,24 +32,24 @@ void mix(int buf[9]) {
 }
 
 // Checks whether it will be legal to assign num to the given row, col
-int num_safe(int grid[9][9], int row, int col, int num) {
+int num_safe(int sudoku[9][9], int row, int col, int num) {
   deep++;
   // Check if we find the same num in the similar row
   for (int i = 0; i < 9; i++)
-    if (grid[row][i] == num) return 0;
+    if (sudoku[row][i] == num) return 0;
   // Check if we find the same num in the similar column
   for (int i = 0; i < 9; i++)
-    if (grid[i][col] == num) return 0;
+    if (sudoku[i][col] == num) return 0;
   // Check if we find the same num in the particular 3*3 matrix
   int startRow = row - row % 3, startCol = col - col % 3;
   for (int i = 0; i < 3; i++)
     for (int ii = 0; ii < 3; ii++)
-      if (grid[i + startRow][ii + startCol] == num) return 0;
+      if (sudoku[i + startRow][ii + startCol] == num) return 0;
   return 1;
 }
 
 //If on one position only on number posible we fond it!
-int find1(int grid[9][9]) {
+int find1(int sudoku[9][9]) {
   int hit_num, hit_count, found_cnt=0;
   int buf[3][9];
   mix(buf[0]);
@@ -60,17 +60,17 @@ int find1(int grid[9][9]) {
         int col=buf[1][colmix]; 
         hit_num = 0;
         hit_count = 0;
-        if (!grid[row][col]) {
+        if (!sudoku[row][col]) {
           mix(buf[2]);
           for (int nummix = 1; nummix < 10; nummix++){
             int num=1+buf[2][nummix-1]; //mixer from 0-8
-            if (num_safe(grid, row, col, num)) {
+            if (num_safe(sudoku, row, col, num)) {
               hit_num = num;
               hit_count++;
             }}
           if (hit_count == 1) {
               printf("Hit on row %i, column %i with rule 1\n",row + 1, col + 1);
-            grid[row][col] = hit_num;
+            sudoku[row][col] = hit_num;
             found_cnt++;
           }
         }
@@ -79,7 +79,7 @@ return found_cnt;
 }
 
 // find a number in the line that is missing and legally possible only once
-int find2(int grid[9][9]) {
+int find2(int sudoku[9][9]) {
   int hit_count, found, hit_col, found_cnt=0;
   int buf[3][9];
   mix(buf[0]);
@@ -93,18 +93,18 @@ int find2(int grid[9][9]) {
       hit_count = 0;
       // we check if the number we are looking for is already in the line
       for (int col = 0; col < 9; col++)
-        if (grid[row][col] == num) found++;
+        if (sudoku[row][col] == num) found++;
       // Only if the line does not have the searched number
       if (found == 0)
         for (int col = 0; col < 9; col++)
-          if (grid[row][col] == 0)
-            if (num_safe(grid, row, col, num)) {
+          if (sudoku[row][col] == 0)
+            if (num_safe(sudoku, row, col, num)) {
               hit_col = col;
               hit_count++;
             }
       // Only if the searched number is possible once
       if (hit_count == 1) {
-        grid[row][hit_col] = num;
+        sudoku[row][hit_col] = num;
         found_cnt++;
         printf("Hit on row %i, column %i with rule 2\n", row + 1, hit_col + 1);
       }
@@ -114,7 +114,7 @@ int find2(int grid[9][9]) {
 }
 
 // find a number in the column that is missing and legally possible only once
-int find3(int grid[9][9]) {
+int find3(int sudoku[9][9]) {
   int hit_count, found, hit_row, found_cnt=0;
   
   int buf[3][9];
@@ -129,18 +129,18 @@ int find3(int grid[9][9]) {
       hit_count = 0;
       // we check if the searched number is already in the column
       for (int row = 0; row < 9; row++)
-        if (grid[row][col] == num) found++;
+        if (sudoku[row][col] == num) found++;
       // Only if the column does not have the searched number
       if (found == 0)
         for (int row = 0; row < 9; row++)
-          if (grid[row][col] == 0)
-            if (num_safe(grid, row, col, num)) {
+          if (sudoku[row][col] == 0)
+            if (num_safe(sudoku, row, col, num)) {
               hit_row = row;
               hit_count++;
             }
       // Only if the searched number is possible once
       if (hit_count == 1) {
-        grid[hit_row][col] = num;
+        sudoku[hit_row][col] = num;
         found_cnt++;
         printf("Hit on row %i, column %i with rule 3\n", hit_row + 1, col + 1);
       }
@@ -151,7 +151,7 @@ int find3(int grid[9][9]) {
 
 
 // find a number in the group that is missing and legally possible only once
-int find4(int grid[9][9]) {
+int find4(int sudoku[9][9]) {
   int hit_count, found, hit_row, hit_col, hit_elm, found_cnt = 0, row, col;
   int buf[3][9];
   mix(buf[0]);
@@ -166,7 +166,7 @@ int find4(int grid[9][9]) {
         for (int elm = 0; elm < 9; elm++) {
           row = elm / 3 + grp / 3 * 3;
           col = elm % 3 + grp % 3 * 3;
-          if (grid[row][col] == num) found++;
+          if (sudoku[row][col] == num) found++;
           //printf("Group %i, element %i = row %i, column %i\n",grp+1,
           //elm+1, row+1, col+1);
         }
@@ -175,8 +175,8 @@ int find4(int grid[9][9]) {
         for (int elm = 0; elm< 9; elm++) {    
           row = elm / 3 + grp / 3 * 3;
           col = elm % 3 + grp % 3 * 3;
-          if (grid[row][col] == 0)
-            if (num_safe(grid, row, col, num)) {
+          if (sudoku[row][col] == 0)
+            if (num_safe(sudoku, row, col, num)) {
               hit_row = row;
               hit_col = col;
               hit_elm = elm;
@@ -185,7 +185,7 @@ int find4(int grid[9][9]) {
         }
       // Only if the searched number is possible once
       if (hit_count == 1) {
-        grid[hit_row][hit_col] = num;
+        sudoku[hit_row][hit_col] = num;
         found_cnt++;
         printf("Hit on group %i, element %i with rule 4\n", grp + 1,hit_elm + 1);
       }
@@ -194,25 +194,25 @@ int find4(int grid[9][9]) {
   return found_cnt;
 }
 
-int solve(int grid[9][9], int row, int col) {
+int solve(int sudoku[9][9], int row, int col) {
   deep++;
   if (row == 8 && col == 9) return 1;
   if (col == 9) {
     row++;
     col = 0;
   }
-  if (grid[row][col] > 0) return solve(grid, row, col + 1);
+  if (sudoku[row][col] > 0) return solve(sudoku, row, col + 1);
   for (int num = 1; num <= 9; num++) {
-    if (num_safe(grid, row, col, num)) {
-      grid[row][col] = num;
-      if (solve(grid, row, col + 1)) return 1;
+    if (num_safe(sudoku, row, col, num)) {
+      sudoku[row][col] = num;
+      if (solve(sudoku, row, col + 1)) return 1;
     }
-    grid[row][col] = 0;
+    sudoku[row][col] = 0;
   }
   return 0;
 }
 
-// function to print grid
+// function to print sudoku
 void print(int arr1[9][9], int arr2[9][9]) {
 #ifdef _WIN32
   system("Color");
@@ -232,9 +232,9 @@ void print(int arr1[9][9], int arr2[9][9]) {
 }
 
 int main() {
-  int gridbuf1[9][9];
-  int gridbuf2[9][9];
-  int grids[13][9][9] =
+  int sudokubuf1[9][9];
+  int sudokubuf2[9][9];
+  int sudoku[13][9][9] =
       // sudoku 00 with 392 recursion depth
       {{{0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 2
@@ -371,20 +371,20 @@ int main() {
 //Init  
   for (int i = 0; i < 9; i++)
     for (int ii = 0; ii < 9; ii++) {
-      gridbuf1[i][ii] = grids[SUNR][i][ii];
-      gridbuf2[i][ii] = grids[SUNR][i][ii];
+      sudokubuf1[i][ii] = sudoku[SUNR][i][ii];
+      sudokubuf2[i][ii] = sudoku[SUNR][i][ii];
     }
 
 //Simple solution attempt
-  while(find4(gridbuf2)||find3(gridbuf2)||find2(gridbuf2)||find1(gridbuf2)); 
-  while(find1(gridbuf2)||find2(gridbuf2)||find3(gridbuf2)||find4(gridbuf2)); 
-  print(gridbuf1, gridbuf2);
+  while(find4(sudokubuf2)||find3(sudokubuf2)||find2(sudokubuf2)||find1(sudokubuf2)); 
+  while(find1(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2)||find4(sudokubuf2)); 
+  print(sudokubuf1, sudokubuf2);
   printf("Sudoku %i had %ld tests\n", SUNR, deep);
   int no_solution = 0, solutions = 0;
   for (int i = 0; i < 9; i++)
     for (int ii = 0; ii < 9; ii++) {
-      if (gridbuf2[i][ii] == 0) no_solution++;
-      if (gridbuf2[i][ii] != gridbuf1[i][ii]) solutions++;
+      if (sudokubuf2[i][ii] == 0) no_solution++;
+      if (sudokubuf2[i][ii] != sudokubuf1[i][ii]) solutions++;
     }    
   if (no_solution){
     printf("No full solution found\n");
@@ -397,14 +397,14 @@ int main() {
 //Init
   for (int i = 0; i < 9; i++)
     for (int ii = 0; ii < 9; ii++) {
-      gridbuf1[i][ii] = grids[SUNR][i][ii];
-      gridbuf2[i][ii] = grids[SUNR][i][ii];
+      sudokubuf1[i][ii] = sudoku[SUNR][i][ii];
+      sudokubuf2[i][ii] = sudoku[SUNR][i][ii];
     }
 
 // Complete solution  
   deep = 0;
-  if (solve(gridbuf2, 0, 0) == 1)
-    print(gridbuf1, gridbuf2);
+  if (solve(sudokubuf2, 0, 0) == 1)
+    print(sudokubuf1, sudokubuf2);
   else
     printf("No solution exists\n");
   printf("Sudoku %i had %ld tests\n", SUNR, deep);
