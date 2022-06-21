@@ -10,7 +10,7 @@
 // https://www.geeksforgeeks.org/sudoku-backtracking-7
 // https://developpaper.com/source-code-of-solving-sudoku-program-in-c-language/
 // https://formatter.org/cpp-formatter
-
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 static unsigned long deep = 0;
@@ -18,7 +18,18 @@ static unsigned long deep = 0;
 #define RED "\x1B[31m"
 #define NRM "\x1B[0m"
 
-#define SUNR 3
+#define SUNR 1
+
+// Mix from 0-8
+void mix(int buf[9]) {
+  for (int i = 0; i < 9; i++) buf[i] = -1;
+  for (int i = 0; i < 9; i++) {
+    int rpos;
+    do rpos = rand() % 9;
+    while (buf[rpos] != -1);
+    buf[rpos] = i;
+  }
+}
 
 // Checks whether it will be legal to assign num to the given row, col
 int num_safe(int grid[9][9], int row, int col, int num) {
@@ -40,31 +51,43 @@ int num_safe(int grid[9][9], int row, int col, int num) {
 //If on one position only on number posible we fond it!
 int find1(int grid[9][9]) {
   int hit_num, hit_count, found_cnt=0;
-    for (int row = 0; row < 9; row++)
-      for (int col = 0; col < 9; col++) {
+  int buf[3][9];
+  mix(buf[0]);
+  for (int rowmix = 0; rowmix < 9; rowmix++){ 
+    int row=buf[0][rowmix]; 
+      mix(buf[1]);
+      for (int colmix = 0; colmix < 9; colmix++) {
+        int col=buf[1][colmix]; 
         hit_num = 0;
         hit_count = 0;
         if (!grid[row][col]) {
-          for (int num = 1; num < 10; num++)
+          mix(buf[2]);
+          for (int nummix = 1; nummix < 10; nummix++){
+            int num=1+buf[2][nummix-1]; //mixer from 0-8
             if (num_safe(grid, row, col, num)) {
               hit_num = num;
               hit_count++;
-            }
+            }}
           if (hit_count == 1) {
-              //printf("Hit on row %i, column %i with rule1\n",row + 1, col + 1);
+              printf("Hit on row %i, column %i with rule 1\n",row + 1, col + 1);
             grid[row][col] = hit_num;
             found_cnt++;
           }
         }
-      }
+      }}
 return found_cnt;
 }
 
 // find a number in the line that is missing and legally possible only once
 int find2(int grid[9][9]) {
   int hit_count, found, hit_col, found_cnt=0;
-  for (int num = 1; num < 10; num++) {
-    for (int row = 0; row < 9; row++) {
+  int buf[3][9];
+  mix(buf[0]);
+  for (int nummix = 1; nummix < 10; nummix++){
+    int num=1+buf[0][nummix-1]; //mixer from 0-8
+      mix(buf[1]);
+    for (int rowmix = 0; rowmix < 9; rowmix++) {
+      int row=buf[1][rowmix]; 
       found = 0;
       hit_col = 0;
       hit_count = 0;
@@ -83,7 +106,7 @@ int find2(int grid[9][9]) {
       if (hit_count == 1) {
         grid[row][hit_col] = num;
         found_cnt++;
-        //printf("Hit on row %i, column %i with rule 2\n", row + 1, hit_col + 1);
+        printf("Hit on row %i, column %i with rule 2\n", row + 1, hit_col + 1);
       }
     }
   }
@@ -93,8 +116,14 @@ int find2(int grid[9][9]) {
 // find a number in the column that is missing and legally possible only once
 int find3(int grid[9][9]) {
   int hit_count, found, hit_row, found_cnt=0;
-  for (int num = 1; num < 10; num++) {
-    for (int col = 0; col < 9; col++) {
+  
+  int buf[3][9];
+  mix(buf[0]);
+  for (int nummix = 1; nummix < 10; nummix++){
+    int num=1+buf[0][nummix-1]; //mixer from 0-8
+    mix(buf[1]);
+    for (int colmix = 0; colmix < 9; colmix++) {
+      int col=buf[1][colmix];
       found = 0;
       hit_row = 0;
       hit_count = 0;
@@ -113,7 +142,7 @@ int find3(int grid[9][9]) {
       if (hit_count == 1) {
         grid[hit_row][col] = num;
         found_cnt++;
-        //printf("Hit on row %i, column %i with rule 3\n", hit_row + 1, col + 1);
+        printf("Hit on row %i, column %i with rule 3\n", hit_row + 1, col + 1);
       }
     }
   }
@@ -124,22 +153,26 @@ int find3(int grid[9][9]) {
 // find a number in the group that is missing and legally possible only once
 int find4(int grid[9][9]) {
   int hit_count, found, hit_row, hit_col, hit_elm, found_cnt = 0, row, col;
-  for (int num = 1; num < 10; num++) {
-    for (int grp = 0; grp < 9; grp++) {
+  int buf[3][9];
+  mix(buf[0]);
+  for (int nummix = 1; nummix < 10; nummix++) {
+    int num=1+buf[0][nummix-1]; //mixer from 0-8
+    for (int grpmix = 0; grpmix < 9; grpmix++) {
+      mix(buf[1]);
+      int grp=buf[1][grpmix]; 
       found = 0;
       hit_count = 0;
       // we check if the number we are looking for is already in the column
-      for (int row_tmp = 0; row_tmp < 3; row_tmp++)
         for (int elm = 0; elm < 9; elm++) {
           row = elm / 3 + grp / 3 * 3;
           col = elm % 3 + grp % 3 * 3;
           if (grid[row][col] == num) found++;
-          // printf("Group %i, element %i = row %i, column %i\n",grp+1,
-          // elm+1, row+1, col+1);
+          //printf("Group %i, element %i = row %i, column %i\n",grp+1,
+          //elm+1, row+1, col+1);
         }
       // Only if the group does not have the number you are looking for
       if (found == 0)
-        for (int elm = 0; elm < 9; elm++) {
+        for (int elm = 0; elm< 9; elm++) {    
           row = elm / 3 + grp / 3 * 3;
           col = elm % 3 + grp % 3 * 3;
           if (grid[row][col] == 0)
@@ -154,7 +187,7 @@ int find4(int grid[9][9]) {
       if (hit_count == 1) {
         grid[hit_row][hit_col] = num;
         found_cnt++;
-        // printf("Hit on group %i, element %i with rule 4\n", grp + 1,hit_elm + 1);
+        printf("Hit on group %i, element %i with rule 4\n", grp + 1,hit_elm + 1);
       }
     }
   }
@@ -333,6 +366,8 @@ int main() {
         {0, 2, 0, 0, 0, 4, 5, 0, 0},    // Zeile 8
         {0, 6, 0, 0, 0, 5, 0, 1, 0}}};  // Zeile 9
   
+//Init Rand
+  srand(time(NULL));  
 //Init  
   for (int i = 0; i < 9; i++)
     for (int ii = 0; ii < 9; ii++) {
@@ -341,6 +376,7 @@ int main() {
     }
 
 //Simple solution attempt
+  while(find4(gridbuf2)||find3(gridbuf2)||find2(gridbuf2)||find1(gridbuf2)); 
   while(find1(gridbuf2)||find2(gridbuf2)||find3(gridbuf2)||find4(gridbuf2)); 
   print(gridbuf1, gridbuf2);
   printf("Sudoku %i had %ld tests\n", SUNR, deep);
@@ -354,9 +390,9 @@ int main() {
     printf("No full solution found\n");
     if (solutions)
     printf("but %i new numbers found\n\n",solutions );  
-    else printf("\n");
+    else putchar ('\n');
   }
-  else printf("\n");  
+    else putchar ('\n'); 
   
 //Init
   for (int i = 0; i < 9; i++)
@@ -365,7 +401,7 @@ int main() {
       gridbuf2[i][ii] = grids[SUNR][i][ii];
     }
 
-// Complete soluti  
+// Complete solution  
   deep = 0;
   if (solve(gridbuf2, 0, 0) == 1)
     print(gridbuf1, gridbuf2);
@@ -374,4 +410,3 @@ int main() {
   printf("Sudoku %i had %ld tests\n", SUNR, deep);
   return 0;
 }
-
