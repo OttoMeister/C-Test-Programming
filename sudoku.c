@@ -7,6 +7,8 @@
 // gcc -o sudoku C:\MinGW\sudoku.c && sudoku.exe
 
 // https://onlinegdb.com/Z-Y9bD_Zo
+// https://github.com/mentalmove/SudokuGenerator/branches/stale
+// https://github.com/mislah/Sudoku/blob/main/sudoku.c
 // https://www.geeksforgeeks.org/sudoku-backtracking-7
 // https://developpaper.com/source-code-of-solving-sudoku-program-in-c-language/
 // https://formatter.org/cpp-formatter
@@ -18,7 +20,7 @@ static unsigned long deep = 0;
 #define RED "\x1B[31m"
 #define NRM "\x1B[0m"
 
-#define SUNR 12
+#define SUNR 14
 
 // Mix from 0-8
 void mix(int buf[9]) {
@@ -35,11 +37,11 @@ void mix(int buf[9]) {
 int num_safe(int sudoku[9][9], int row, int col, int num) {
   deep++;
   // Check if we find the same num in the similar row
-  for (int i = 0; i < 9; i++)
-    if (sudoku[row][i] == num) return 0;
+  for (int colaux = 0; colaux < 9; colaux++)
+    if (sudoku[row][colaux] == num) return 0;
   // Check if we find the same num in the similar column
-  for (int i = 0; i < 9; i++)
-    if (sudoku[i][col] == num) return 0;
+  for (int rowaux = 0; rowaux < 9; rowaux++)
+    if (sudoku[rowaux][col] == num) return 0;
   // Check if we find the same num in the particular 3*3 matrix
   int startRow = row - row % 3, startCol = col - col % 3;
   for (int i = 0; i < 3; i++)
@@ -252,7 +254,7 @@ void print(int arr1[9][9], int arr2[9][9]) {
 int main() {
   int sudokubuf1[9][9];
   int sudokubuf2[9][9];
-  int sudoku[14][9][9] =
+  int sudoku[15][9][9] =
       // sudoku 00 with 392 recursion depth
       {{{0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 2
@@ -392,27 +394,37 @@ int main() {
         {0, 0, 0, 0, 5, 1, 0, 0, 3},    // Zeile 6
         {0, 0, 0, 2, 0, 0, 7, 9, 0},    // Zeile 7
         {0, 2, 0, 0, 0, 4, 5, 0, 0},    // Zeile 8
-        {0, 6, 0, 0, 0, 5, 0, 1, 0}}};  // Zeile 9
+        {0, 6, 0, 0, 0, 5, 0, 1, 0}},  // Zeile 9
+        // sudoku 14
+       {{3, 0, 6, 5, 0, 8, 4, 0, 0}, 
+        {5, 2, 0, 0, 0, 0, 0, 0, 0}, 
+        {0, 8, 7, 0, 0, 0, 0, 3, 1}, 
+        {0, 0, 3, 0, 1, 0, 0, 8, 0}, 
+        {9, 0, 0, 8, 6, 3, 0, 0, 5}, 
+        {0, 5, 0, 0, 9, 0, 6, 0, 0}, 
+        {1, 3, 0, 0, 0, 0, 2, 5, 0}, 
+        {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
+        {0, 0, 5, 2, 0, 6, 3, 0, 0}}};
   
 //Init Rand
   srand(time(NULL));  
 //Init  
-  for (int i = 0; i < 9; i++)
+  for (int row = 0; row < 9; row++)
     for (int col = 0; col < 9; col++) {
-      sudokubuf1[i][col] = sudoku[SUNR][i][col];
-      sudokubuf2[i][col] = sudoku[SUNR][i][col];
+      sudokubuf1[row][col] = sudoku[SUNR][row][col];
+      sudokubuf2[row][col] = sudoku[SUNR][row][col];
     }
 
 //Simple solution attempt
-  while(find4(sudokubuf2)||find3(sudokubuf2)||find2(sudokubuf2)||find1(sudokubuf2)); 
   while(find1(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2)||find4(sudokubuf2)); 
+  while(find4(sudokubuf2)||find3(sudokubuf2)||find2(sudokubuf2)||find1(sudokubuf2));
   print(sudokubuf1, sudokubuf2);
   printf("Sudoku %i had %ld tests\n", SUNR, deep);
   int no_solution = 0, solutions = 0;
-  for (int i = 0; i < 9; i++)
+  for (int row = 0; row < 9; row++)
     for (int col = 0; col < 9; col++) {
-      if (sudokubuf2[i][col] == 0) no_solution++;
-      if (sudokubuf2[i][col] != sudokubuf1[i][col]) solutions++;
+      if (sudokubuf2[row][col] == 0) no_solution++;
+      if (sudokubuf2[row][col] != sudokubuf1[row][col]) solutions++;
     }    
   if (no_solution){
     printf("No full solution found\n");
@@ -422,11 +434,11 @@ int main() {
   }
     else putchar ('\n'); 
   
-//Init
-  for (int i = 0; i < 9; i++)
+//Init  
+  for (int row = 0; row < 9; row++)
     for (int col = 0; col < 9; col++) {
-      sudokubuf1[i][col] = sudoku[SUNR][i][col];
-      sudokubuf2[i][col] = sudoku[SUNR][i][col];
+      sudokubuf1[row][col] = sudoku[SUNR][row][col];
+      sudokubuf2[row][col] = sudoku[SUNR][row][col];
     }
 
 // Complete solution  
