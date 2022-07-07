@@ -6,7 +6,7 @@
 // "C:\Program Files\Notepad++\notepad++.exe"  C:\MinGW\sudoku.c
 // gcc -o sudoku C:\MinGW\sudoku.c && sudoku.exe
 
-// https://onlinegdb.com/0U7YYQ3X2
+// https://onlinegdb.com/D8IuC5ZMC
 // https://github.com/mentalmove/SudokuGenerator/branches/stale
 // https://github.com/mislah/Sudoku/blob/main/sudoku.c
 // https://www.geeksforgeeks.org/sudoku-backtracking-7
@@ -255,7 +255,7 @@ void print(int arr1[9][9], int arr2[9][9]) {
 int main() {
   int sudokubuf1[9][9];
   int sudokubuf2[9][9];
-  int sudoku[20][9][9] =
+  int sudoku[23][9][9] =
       // sudoku 00 with 392 recursion depth
       {{{0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},   // Zeile 2
@@ -395,7 +395,7 @@ int main() {
         {0, 0, 0, 0, 5, 1, 0, 0, 3},    // Zeile 6
         {0, 0, 0, 2, 0, 0, 7, 9, 0},    // Zeile 7
         {0, 2, 0, 0, 0, 4, 5, 0, 0},    // Zeile 8
-        {0, 6, 0, 0, 0, 5, 0, 1, 0}},  // Zeile 9
+        {0, 6, 0, 0, 0, 5, 0, 1, 0}},   // Zeile 9
         // sudoku 14 with 7881 tests (simple)
        {{3, 0, 6, 5, 0, 8, 4, 0, 0},
         {5, 2, 0, 0, 0, 0, 0, 0, 0},
@@ -426,7 +426,37 @@ int main() {
         {0, 0, 0, 6, 0, 0, 9, 0, 0},    // Zeile 7
         {9, 0, 8, 0, 0, 1, 0, 3, 4},    // Zeile 8
         {0, 5, 0, 4, 0, 0, 6, 0, 0}},   // Zeile 9};
-        // sudoku 17
+       // sudoku 17
+       {{4, 1, 0, 0, 0, 0, 0, 0, 9},    // Zeile 1
+        {0, 0, 0, 0, 5, 3, 7, 0, 0},    // Zeile 2
+        {0, 0, 5, 2, 0, 0, 0, 0, 0},    // Zeile 3
+        {0, 0, 0, 0, 1, 0, 0, 7, 0},    // Zeile 4
+        {0, 8, 9, 0, 0, 5, 0, 0, 0},    // Zeile 5
+        {0, 0, 0, 0, 0, 0, 5, 0, 3},    // Zeile 6
+        {0, 0, 0, 6, 0, 0, 9, 0, 0},    // Zeile 7
+        {9, 0, 8, 0, 0, 1, 0, 3, 4},    // Zeile 8
+        {0, 5, 0, 4, 0, 0, 6, 0, 0}},   // Zeile 9};
+        // sudoku 18
+       {{1, 6, 8, 0, 4, 7, 0, 0, 0},    // Zeile 1
+        {7, 9, 5, 0, 0, 0, 4, 8, 0},    // Zeile 2
+        {4, 3, 2, 9, 0, 8, 0, 7, 6},    // Zeile 3
+        {9, 8, 6, 7, 0, 0, 0, 3, 4},    // Zeile 4
+        {2, 1, 3, 4, 0, 0, 8, 0, 7},    // Zeile 5
+        {5, 4, 7, 3, 8, 0, 0, 0, 0},    // Zeile 6
+        {8, 7, 4, 0, 0, 0, 0, 0, 2},    // Zeile 7
+        {3, 0, 1, 6, 7, 0, 0, 4, 8},    // Zeile 8
+        {6, 0, 9, 8, 0, 4, 7, 0, 0}},   // Zeile 9};
+        // sudoku 19
+       {{3, 9, 8, 1, 7, 6, 5, 4, 2},    // Zeile 1
+        {6, 4, 1, 2, 8, 5, 0, 3, 0},    // Zeile 2
+        {0, 2, 0, 3, 4, 9, 6, 8, 1},    // Zeile 3
+        {0, 0, 0, 8, 0, 3, 0, 1, 0},    // Zeile 4
+        {0, 0, 0, 6, 0, 7, 0, 9, 0},    // Zeile 5
+        {0, 0, 0, 4, 0, 2, 3, 5, 0},    // Zeile 6
+        {0, 6, 0, 0, 3, 4, 0, 2, 5},    // Zeile 7
+        {9, 0, 4, 0, 2, 8, 0, 6, 0},    // Zeile 8
+        {0, 0, 0, 0, 6, 1, 0, 7, 0}},   // Zeile 9};
+        // sudoku 20
        {{0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 2
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 3
@@ -436,7 +466,7 @@ int main() {
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 7
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 8
         {0, 0, 0, 0, 0, 0, 0, 0, 0}},   // Zeile 9};
-        // sudoku 18
+        // sudoku 22
        {{0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 1
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 2
         {0, 0, 0, 0, 0, 0, 0, 0, 0},    // Zeile 3
@@ -454,9 +484,9 @@ int main() {
       sudokubuf1[i/9][i%9] = sudokubuf2[i/9][i%9] = sudoku[SUNR][i/9][i%9];
   
 //Simple solution attempt
-  while(find1(sudokubuf2)||find1(sudokubuf2)); 
-  while(find1(sudokubuf2)||find2(sudokubuf2));
-  while(find1(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2));
+  while(find2(sudokubuf2)||find3(sudokubuf2)); 
+  while(find2(sudokubuf2)||find3(sudokubuf2));
+  while(find4(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2));
   while(find1(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2)||find4(sudokubuf2));
   while(find1(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2)||find4(sudokubuf2));
   print(sudokubuf1, sudokubuf2);
