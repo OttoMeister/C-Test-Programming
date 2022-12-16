@@ -55,7 +55,7 @@ int num_safe(int grid[9][9], int row, int col, int num) {
 
 // If on one position only on number posible we fond it!
 int find1(int sudoku[9][9]) {
-  int hit_num, hit_count, found_cnt = 0;
+  int hit_num, hit_count=0, found_cnt = 0;
   int buf[3][9];
   mix(buf[0]);
   for (int rowmix = 0; rowmix < 9; rowmix++) {
@@ -87,7 +87,7 @@ int find1(int sudoku[9][9]) {
 
 // find a number in the line that is missing and legally possible only once
 int find2(int sudoku[9][9]) {
-  int hit_count, found, hit_col, found_cnt = 0;
+  int hit_count, found, hit_col=0, found_cnt = 0;
   int buf[3][9];
   mix(buf[0]);
   for (int nummix = 1; nummix < 10; nummix++) {
@@ -122,7 +122,7 @@ int find2(int sudoku[9][9]) {
 
 // find a number in the column that is missing and legally possible only once
 int find3(int sudoku[9][9]) {
-  int hit_count, found, hit_row, found_cnt = 0;
+  int hit_count, found, hit_row=0, found_cnt = 0;
   int buf[3][9];
   mix(buf[0]);
   for (int nummix = 1; nummix < 10; nummix++) {
@@ -157,7 +157,7 @@ int find3(int sudoku[9][9]) {
 
 // find a number in the group that is missing and legally possible only once
 int find4(int sudoku[9][9]) {
-  int hit_count, found, hit_row, hit_col, hit_elm, found_cnt = 0, row, col;
+  int hit_count, found, hit_row=0, hit_col=0, hit_elm=0, found_cnt = 0, row, col;
   int buf[3][9];
   mix(buf[0]);
   for (int nummix = 1; nummix < 10; nummix++) {
@@ -447,16 +447,14 @@ int main() {
   // Init Rand
   srand(time(NULL));
   // Init
-  for (int row = 0; row < 9; row++)
-    for (int col = 0; col < 9; col++) {
-      sudokubuf1[row][col] = sudoku[SUNR][row][col];
-      sudokubuf2[row][col] = sudoku[SUNR][row][col];
-    }
-
+  for (int i = 0; i < 9*9; i++)  
+      sudokubuf1[i/9][i%9] = sudokubuf2[i/9][i%9] = sudoku[SUNR][i/9][i%9];
   // Simple solution attempt
-  while (find2(sudokubuf2) || find3(sudokubuf2) || find2(sudokubuf2) || find3(sudokubuf2));
-  while (find2(sudokubuf2) || find3(sudokubuf2) || find2(sudokubuf2) || find4(sudokubuf2));
-  while (find4(sudokubuf2) || find3(sudokubuf2) || find2(sudokubuf2) || find1(sudokubuf2));
+  while(find2(sudokubuf2)||find3(sudokubuf2)); 
+  while(find2(sudokubuf2)||find3(sudokubuf2));
+  while(find4(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2));
+  while(find1(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2)||find4(sudokubuf2));
+  while(find1(sudokubuf2)||find2(sudokubuf2)||find3(sudokubuf2)||find4(sudokubuf2));
   print(sudokubuf1, sudokubuf2);
   printf("Sudoku %i had %ld tests\n", SUNR, deep);
   int no_solution = 0, solutions = 0;
@@ -475,10 +473,8 @@ int main() {
     putchar('\n');
 
   // Init
-  for (int row = 0; row < 9; row++)
-    for (int col = 0; col < 9; col++) {
-      sudokubuf1[row][col] = sudoku[SUNR][row][col];
-      sudokubuf2[row][col] = sudoku[SUNR][row][col];
+  for (int i = 0; i < 9*9; i++)  
+      sudokubuf1[i/9][i%9] = sudokubuf2[i/9][i%9] = sudoku[SUNR][i/9][i%9];
     }
 
   // Complete solution
