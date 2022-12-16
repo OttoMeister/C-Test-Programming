@@ -475,8 +475,7 @@ int main() {
   // Init
   for (int i = 0; i < 9*9; i++)  
       sudokubuf1[i/9][i%9] = sudokubuf2[i/9][i%9] = sudoku[SUNR][i/9][i%9];
-    }
-
+    
   // Complete solution
   deep = 0;
   if (solve(sudokubuf2))
