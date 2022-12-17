@@ -6,7 +6,7 @@
 // "C:\Program Files\Notepad++\notepad++.exe"  C:\MinGW\sudoku.c
 // gcc -o sudoku C:\MinGW\sudoku.c && sudoku.exe
 
-// https://onlinegdb.com/wXk6RI94gQ
+// https://onlinegdb.com/n3JqjPJTU
 // https://github.com/mentalmove/SudokuGenerator/branches/stale
 // https://github.com/mislah/Sudoku/blob/main/sudoku.c
 // https://www.geeksforgeeks.org/sudoku-backtracking-7
