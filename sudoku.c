@@ -20,7 +20,7 @@ static unsigned long deep = 0;
 
 #define SUNR 8
 
-// Mix f  findUnassignedLocation2() rom 0-8 use Fisherb Yates shuffle
+// Mix from 0-8 use Fisherb Yates shuffle
 void mix(int buf[9]) {
   for (int i = 0; i < 9; i++) buf[i] = i;
   for (int i = 0; i < 9; i++) {
