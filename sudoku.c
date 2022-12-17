@@ -6,7 +6,7 @@
 // "C:\Program Files\Notepad++\notepad++.exe"  C:\MinGW\sudoku.c
 // gcc -o sudoku C:\MinGW\sudoku.c && sudoku.exe
 
-// https://onlinegdb.com/DNA10nSCPU
+// https://onlinegdb.com/wXk6RI94gQ
 // https://github.com/mentalmove/SudokuGenerator/branches/stale
 // https://github.com/mislah/Sudoku/blob/main/sudoku.c
 // https://www.geeksforgeeks.org/sudoku-backtracking-7
@@ -20,7 +20,7 @@ static unsigned long deep = 0;
 
 #define SUNR 8
 
-// Mix from 0-8 use Fisherb Yates shuffle
+// Mix f  findUnassignedLocation2() rom 0-8 use Fisherb Yates shuffle
 void mix(int buf[9]) {
   for (int i = 0; i < 9; i++) buf[i] = i;
   for (int i = 0; i < 9; i++) {
@@ -32,12 +32,33 @@ void mix(int buf[9]) {
 }
 
 // Function to find an unassigned location in the grid
-int findUnassignedLocation(int grid[9][9], int *row, int *col) {
+int findUnassignedLocation2(int grid[9][9], int *row, int *col) {
   for (*row = 0; *row < 9; (*row)++)
     for (*col = 0; *col < 9; (*col)++)
-      if (grid[*row][*col] == 0) return 1;
+      if (grid[*row][*col] == 0) {
+       printf("findUnassignedLocation1 on row %i - col %i \n", *row + 1, *col + 1);  
+      return 1;}
   return 0;
 }
+
+//Function to find an unassigned location in the grid using a random search
+int findUnassignedLocation1(int grid[9][9], int *row, int *col) {
+  int buf[2][9];
+  mix(buf[0]);
+  for (int rowmix = 0; rowmix < 9; rowmix++) {
+    mix(buf[1]);
+    for (int colmix = 0; colmix < 9; colmix++) {
+      if (grid[buf[0][rowmix]][buf[1][colmix]] == 0) {
+        printf("findUnassignedLocation2 on row %i - col %i \n", buf[0][rowmix] + 1, buf[1][colmix] + 1);
+        *row = buf[0][rowmix];
+        *col = buf[1][colmix];
+        return 1;
+      }
+    }
+  }
+  return 0;
+}
+
 
 // Function to check if a number is safe to be placed in a particular location
 int num_safe(int grid[9][9], int row, int col, int num) {
@@ -205,7 +226,7 @@ int solve(int grid[9][9]) {
   int row, col;
   deep++;
   // If there is no unassigned location, the puzzle is solved
-  if (!findUnassignedLocation(grid, &row, &col)) return 1;
+  if (!findUnassignedLocation1(grid, &row, &col)) return 1;
   // Try every number from 1 to 9
   for (int num = 1; num <= 9; num++) {
     // If it is safe to place 'num' at (row, col), do so and recursively try to
@@ -476,6 +497,7 @@ int main() {
   for (int i = 0; i < 9*9; i++)  
       sudokubuf1[i/9][i%9] = sudokubuf2[i/9][i%9] = sudoku[SUNR][i/9][i%9];
     
+
   // Complete solution
   deep = 0;
   if (solve(sudokubuf2))
