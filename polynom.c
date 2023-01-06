@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #define MAX_POINTS 10
-//https://onlinegdb.com/dwC44b74B
+// https://onlinegdb.com/dwC44b74B
 
 // polynomial of degree 2 using Newton-Gregory forward interpolation 
 double
