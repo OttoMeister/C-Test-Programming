@@ -18,7 +18,7 @@ start /B test.exe
 sudo apt install libfreetype6-dev libsdl2-ttf-dev libsdl2-ttf-2.0-0 -y
 sudo apt install libjpeg-dev libwebp-dev libtiff5-dev libsdl2-image-dev libsdl2-image-2.0-0 -y
 
-ps aux | grep -q "[n]otepadqq" || notepadqq ~/sdl2_test11.c & gcc -o test sdl2_test11.c -I/usr/include/SDL2 -D_REENTRAN -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_gfx -lm && timeout 20s ./test &
+ps aux | grep  "[p]luma" | grep  -q "sdl2_test11"  || pluma src/sdl2_test11.c & gcc -o test src/sdl2_test11.c -I/usr/include/SDL2 -D_REENTRAN -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_gfx -lm && timeout 20s ./test &
 */
 
 
@@ -41,7 +41,7 @@ ps aux | grep -q "[n]otepadqq" || notepadqq ~/sdl2_test11.c & gcc -o test sdl2_t
 #define ALIGNMENT_FACTOR 0.01
 #define SEPARATION_FACTOR 0.05
 
-#define FRAMERATE_DELAY 50
+#define FRAMERATE_DELAY 5
 #define FONT_SIZE 36
 #define FONT_PATH "Atkinson.ttf"
 #define BACKGROUND_PNG "aquarium.png"
