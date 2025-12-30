@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<OISafe version="1" date="Dec 30, 2025 12:06:34 AM Greenwich Mean Time">
+  <MasterKey>ac911ad4d87d6ce56bbad16c3631792c08f07c497ea2ddd15f471d64672f6ab4c088b10571ea89f73274abeb8a21575fec57bc7295e86bce730ef0265a1446cc48fd82089ef2e8bb746f877e7367f59f</MasterKey>
+  <Salt>b2e7e20476b362f6</Salt>
+  <Category name="edecc542159dc48d70fe6a47d879e415">
+    <Entry>
+      <RowID>5</RowID>
+      <Description>34ea8ae8a90e9f156badf7e76496aa70</Description>
+      <Website>0e95f7619f300fb91f7e0f1b5c47a538</Website>
+      <Username>283b70632898754c7b63eed3a7f4b602</Username>
+      <Password>c9fdba6f58527895765976a36bb5494f</Password>
+      <Note>45d51de3a4bea91c5e161b327e4ac3aa57307796e40d9b6333203f4028429668318934fa029704921b3e8729205ff3f20aa80967cd976db374d441dffd84935965c94b6910480d0a9cca634a86924197ac9dcd77eaebd72013cc16b1d31f4b1544206bd3835a19df002a06ff4ce07157595a7e61aca0a518d608073b85c9ee233ae4c5969076805b91e3d5718445f511ec24a728bcb882e10362a7a55d762065</Note>
+      <UniqueName></UniqueName>
+    </Entry>
+  </Category>
+  <Category name="e94f19f69bedce1b24882c3a8fed003b">
+    <Entry>
+      <RowID>1</RowID>
+      <Description>ace6b6724930b9d9bc63a253343b8befbe0e52048b038d8a6cf0842cecfce14b</Description>
+      <Website>1b728c093d072f1e7502ff6803f5892c39e50b93a0f3695b8bb5904b48ffadda</Website>
+      <Username>bb81dcbc1f1d1e6e91791ee35a8d38595e850cbd40149e6a2154d06acfff5826</Username>
+      <Password>3229dbcc1e20504c8fbdf7d31f8daec1c70c56b71d5cb944fbab36c75320f738</Password>
+      <Note>5c433a6aef892c34446aec1cedf85f14ed2b791b982f5f650517e39e935b56278886be309d6c802e0903df2e4d5301c5661d28b80c25c797f8f5ec74fd523d4c</Note>
+      <UniqueName></UniqueName>
+    </Entry>
+    <Entry>
+      <RowID>2</RowID>
+      <Description>c0c047ffa7ab5ccf26401ffdbc293576523eef50faa4d41ff93fd5081de795fa</Description>
+      <Website>ae3cece77e2b52ee1df5e3b1265563ccad717e1c79edf212a066eefe67a3d315</Website>
+      <Username>bb81dcbc1f1d1e6e91791ee35a8d385958c9694d2cc421bd2744d08d4d7b3082</Username>
+      <Password>3229dbcc1e20504c8fbdf7d31f8daec1032b1921f3c307896061842a711e2a1f</Password>
+      <Note>c283cfd01b788b392273d2bf16df5043999ef0c6cdd56e6ff21eb21f61620b5eb4de72089c04eb1e09bd346613c5975d12016aecee5a8d0d92698f7fe34328d5a93ae5a2d0c963c72c0782fd94965e5e4ebf3b5ab2f54ec4ad83ab95af79d552e506bc71f3129c847ccc5e13a871394273f267c4033c315a9f1d0f2b75b3fabb</Note>
+      <UniqueName></UniqueName>
+    </Entry>
+  </Category>
+  <Category name="b18f85f6acb1d1b7cef1250cc631b0b5">
+    <Entry>
+      <RowID>3</RowID>
+      <Description>468abb78f3ec85877753c917fb915dd553ac8f423aed61a0bb11199043bcfd7e</Description>
+      <Website>15ee54f593cfc0f4ae13c5f8c687bac9ab83f8a2f78477430af7dc2e3ae63b83</Website>
+      <Username>4ba6bd06877356d49c7a5bc6ed2176badab3b0a27d50f83e457a341a93d33e70</Username>
+      <Password>bed65cf006b455105bf1a7ab0af8afc5e91803546a4d092a35ce577423236247</Password>
+      <Note>bc9d908c7c0fabe5ba4b17a26905868010481188dffc86431083ae4b3f9d051b97911a439e26ea75754dfa17cff46f08cfc47f4537925d51a82611fcae075d6a4c8b69006dbc1047caf538ee47db856ede9316c98ce46dbee1e5967ac1184012a36647bf0cc29313ba1c1d536bd2fcd8a971a57df7b771f350ebd03ca0ddefa72bd48e785a99314f624f2dc9d35ae06cf728aec6427988d8b30325ccae438f0cd873de4a8f407e796e4c5b70ad53bad7ee89f4a6a13bf596f7976d0a325d461a5f9b0893ae0deaa3d747d5883b0c336a79af3414a70e101dfd48bb1256c57406b8190ef0fc4da42f39b27369ab18bd91a15dc72c27ba620bf6cb115f8fc7033cfb4294b592741d1e1a835933f84f27bbcb453595dccee3f10a28308a9f95a5e2317271f34ab4d33a15692cdc8997455e</Note>
+      <UniqueName></UniqueName>
+    </Entry>
+    <Entry>
+      <RowID>4</RowID>
+      <Description>468abb78f3ec85877753c917fb915dd5a80e045e7c34076b2c85abb3c33738ac</Description>
+      <Website>f0b4d5bd9bff344fe99b2674b10b365ff02dfab120d6ee4a4b729aa6c7a1d440</Website>
+      <Username>4ba6bd06877356d49c7a5bc6ed2176bacc74a64d220686b19af702e0f10f89e8</Username>
+      <Password>bed65cf006b455105bf1a7ab0af8afc56a46a4bcbb875b39f0b2bf16cfaa8218</Password>
+      <Note>a6402418023b9714df226f0d5b7e3052567af5018a4ea6b81143665e27b38ef0f094f7ad4b6d8db76bce697281fb2e9a904e5836695d04d3ac124293b1a4c555301faf808567935bb34f8fd549dc2ceae28bffb80221e5483f3710419d1757d11d5f3c39cdca1f92187ac67c159716ad6d358083ca3ee8aa07bd6e88a65730825ee81e77000b078081a833b247cea5915e66da64fbda9c4867463bed1bb2a4ad8abde5ab2a67544aa38063be6dc63430f677ce8229e29b2eeb285778f192b1e76e9e17da4adf2892dda90f40de1891d4913c3d7adcd8162c6b769b5d353830eee7875148a7059fd87e07ec18b032d94777d68dcc9a7659fe8d6f046aad562f0e</Note>
+      <UniqueName></UniqueName>
+    </Entry>
+  </Category>
+</OISafe>
