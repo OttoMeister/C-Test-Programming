@@ -1,6 +1,7 @@
 // thx to x.com/yuruyurau/status/2022526453779435912
 // apt install libsdl2-dev libimgui-dev libstb-dev
 // g++ -o yuruyurau yuruyurau.cpp /usr/share/doc/libimgui-dev/examples/backends/imgui_impl_opengl3.cpp /usr/share/doc/libimgui-dev/examples/backends/imgui_impl_sdl2.cpp -I/usr/include/imgui -I/usr/include/imgui/backends -I/usr/include/SDL2 -lSDL2 -lGL -limgui -lstb -lm && ./yuruyurau
+
 #include <SDL2/SDL.h>
 #include <SDL_opengl.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
