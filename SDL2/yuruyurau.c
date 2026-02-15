@@ -1,5 +1,6 @@
 // x.com/yuruyurau/status/2022526453779435912
 // gcc -o yuruyurau yuruyurau.c -lSDL2 -lSDL2_gfx -lm  && ./yuruyurau
+// apt install libstb-dev
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
