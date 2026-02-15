@@ -36,7 +36,7 @@ int main() {
     ImGui::NewFrame();
     ImGui::SetNextWindowPos(ImVec2(0,0),ImGuiCond_Once);
     ImGui::SetNextWindowBgAlpha(.0);
-    ImGui::Begin("Controls",nullptr,ImGuiWindowFlags_NoDecoration|ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin(" ",nullptr,ImGuiWindowFlags_NoDecoration|ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::SliderFloat("Speed",&sp,0,.3);
     ImGui::SliderInt("Points",&n,1000,50000);
     ImGui::SliderFloat("Size",&sz,.5,5);
