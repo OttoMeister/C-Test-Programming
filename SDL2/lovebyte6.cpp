@@ -1,5 +1,4 @@
-//g++ -o test src/lovebyte6.cpp imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_demo.cpp imgui/backends/imgui_impl_opengl3.cpp imgui/backends/imgui_impl_sdl2.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp -Iimgui -Iimgui/backends -I/usr/include/SDL2 -lSDL2 -lGL && timeout 20s ./test
-
+//g++ -o lovebyte lovebyte6.cpp /usr/share/doc/libimgui-dev/examples/backends/imgui_impl_opengl3.cpp /usr/share/doc/libimgui-dev/examples/backends/imgui_impl_sdl2.cpp -I/usr/include/imgui -I/usr/include/imgui/backends -I/usr/include/SDL2 -lSDL2 -lGL -limgui -lstb -lm 
 
 #include <SDL2/SDL.h>
 #include <SDL_opengl.h>
