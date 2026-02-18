@@ -11,7 +11,6 @@ void a(int i){
   P((q*sin(c)-79*cos(c/3))*2+400,(q+70)*cos(c)*2+400);}
 int main(){
   SDL_CreateWindowAndRenderer(800,800,0,&w,&r);
-  while(e.type!=SDL_QUIT){
-    SDL_PollEvent(&e);SDL_SetRenderDrawColor(r,0,0,0,255);SDL_RenderClear(r);
-    for(int i=2e4;i--;)a(i);
-    t+=.1;SDL_RenderPresent(r);SDL_Delay(32);}}
+  for(;;){while(SDL_PollEvent(&e))if(e.type==SDL_QUIT)return 0;
+    SDL_SetRenderDrawColor(r,0,0,0,255);SDL_RenderClear(r);
+    for(int i=2e4;i--;)a(i);t+=.1;SDL_RenderPresent(r);SDL_Delay(32);}}
