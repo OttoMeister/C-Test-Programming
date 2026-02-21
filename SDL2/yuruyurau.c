@@ -1,6 +1,7 @@
 // thx x.com/yuruyurau/status/2022526453779435912
 // gcc -o yuruyurau yuruyurau.c -lSDL2 -lSDL2_gfx -lm  && ./yuruyurau
 // apt install libstb-dev
+
 #include <SDL2/SDL2_gfxPrimitives.h>
 #define P(x,y) pixelRGBA(r,x,y,255,255,255,255)
 SDL_Window*w;SDL_Renderer*r;SDL_Event e;
@@ -14,3 +15,4 @@ int main(){
   for(;;){while(SDL_PollEvent(&e))if(e.type==SDL_QUIT)return 0;
     SDL_SetRenderDrawColor(r,0,0,0,255);SDL_RenderClear(r);
     for(int i=2e4;i--;)a(i);t+=.1;SDL_RenderPresent(r);SDL_Delay(32);}}
+
