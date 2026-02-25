@@ -3,7 +3,7 @@
 // apt install libstb-dev
 
 #include <SDL2/SDL.h>
-#define P(x,y) SDL_SetRenderDrawColor(r,255,255,255,255),SDL_RenderDrawPoint(r,x,y)
+#define P(x,y) SDL_RenderDrawPoint(r,x,y)
 SDL_Window*w;SDL_Renderer*r;SDL_Event e;
 float t,k,E,o,q,c,y;
 void a(int i){
@@ -13,5 +13,5 @@ void a(int i){
 int main(){
   SDL_CreateWindowAndRenderer(800,800,0,&w,&r);
   for(;;){while(SDL_PollEvent(&e))if(e.type==SDL_QUIT)return 0;
-    SDL_SetRenderDrawColor(r,0,0,0,255);SDL_RenderClear(r);
+    SDL_SetRenderDrawColor(r,0,0,0,255);SDL_RenderClear(r);SDL_SetRenderDrawColor(r,255,255,255,255);
     for(int i=2e4;i--;)a(i);t+=.1;SDL_RenderPresent(r);SDL_Delay(32);}}
