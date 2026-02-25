@@ -1,13 +1,14 @@
 // Polynominterpolation, check with https://www.wolframalpha.com
 #include <stdio.h>
 #define MAX_POINTS 10
-double polynom(double x,const double xy[][2],int pts) {
+
+double polynom(double x,const double xy[][2],int n) {
   double s=0,p;
-  for(int i=0,j;i<pts;s+=p,i++) 
-    for(p=xy[i][1],j=0;j<pts;j++)
-      if(i!=j)p*=(x-xy[j][0])/(xy[i][0]-xy[j][0]);
-  return s;
-}
+    for(int i=n,j;i--;s+=p)
+      for(p=xy[i][1],j=n;j--;)
+        if(i!=j)p*=(x-xy[j][0])/(xy[i][0]-xy[j][0]);
+return s;}
+
 void main(void) {
   printf("InterpolatingPolynomial[{{4,0},{5.5,120},{20,1200}},x] at x=8 is 316.552\n");
   const double xy[MAX_POINTS][2]={{4,0},{5.5,120},{20,1200}};
