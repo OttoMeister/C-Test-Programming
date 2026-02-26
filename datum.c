@@ -1,20 +1,20 @@
 // date and time test esp32 code on linux pc: gcc -o datum datum.c && ./datum
+
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
 
-const char* getFormattedDate(uint32_t et) {
-  uint32_t zz,er,de,ye,yy,dy,mp;
-  uint8_t dd,mm;static char bf[11];
-  zz=et/86400+719468;er=zz/146097;de=zz-er*146097;
-  ye=(de-de/1460+de/36524-de/146096)/365;yy=ye+er*400;
-  dy=de-(365*ye+ye/4-ye/100);mp=(5*dy+2)/153;
-  dd=dy-(153*mp+2)/5+1;mm=mp<10?mp+3:mp-9;yy+=(mm<=2);
-  bf[0]='0'+dd/10;bf[1]='0'+dd%10;bf[2]='-';
-  bf[3]='0'+mm/10;bf[4]='0'+mm%10;bf[5]='-';
-  bf[6]='0'+yy/1000;bf[7]='0'+(yy/100)%10;
-  bf[8]='0'+(yy/10)%10;bf[9]='0'+yy%10;bf[10]='\0';
-  return bf;
+const char* getFormattedDate(uint32_t t) {
+  static char b[11];uint32_t z,e,c,k,y,l,p;uint8_t d,m;
+  z=t/86400+719468;e=z/146097;c=z-e*146097;
+  k=(c-c/1460+c/36524-c/146096)/365;y=k+e*400;
+  l=c-(365*k+k/4-k/100);p=(5*l+2)/153;
+  d=l-(153*p+2)/5+1;m=p<10?p+3:p-9;y+=(m<=2);
+  b[0]='0'+d/10;b[1]='0'+d%10;b[2]='-';
+  b[3]='0'+m/10;b[4]='0'+m%10;b[5]='-';
+  b[6]='0'+y/1000;b[7]='0'+(y/100)%10;
+  b[8]='0'+(y/10)%10;b[9]='0'+y%10;b[10]='\0';
+  return b;
 }
 
 const char* getFormattedTime(uint32_t epochTime){
