@@ -1,21 +1,20 @@
 // date and time test esp32 code on linux pc: gcc -o datum datum.c && ./datum
-
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
 
-const char* getFormattedDate(uint32_t epochTime) {
-  uint32_t z,era,doe,yoe,y,doy,mp;
-  uint8_t day,mon;static char buf[11];
-  z=epochTime/86400+719468;era=z/146097;doe=z-era*146097;
-  yoe=(doe-doe/1460+doe/36524-doe/146096)/365;y=yoe+era*400;
-  doy=doe-(365*yoe+yoe/4-yoe/100);mp=(5*doy+2)/153;
-  day=doy-(153*mp+2)/5+1;mon=mp<10?mp+3:mp-9;y+=(mon<=2);
-  buf[0]='0'+day/10; buf[1]='0'+day%10; buf[2]='-';
-  buf[3]='0'+mon/10; buf[4]='0'+mon%10; buf[5]='-';
-  buf[6]='0'+y/1000; buf[7]='0'+(y/100)%10;
-  buf[8]='0'+(y/10)%10; buf[9]='0'+y%10; buf[10]='\0';
-  return buf;
+const char* getFormattedDate(uint32_t et) {
+  uint32_t zz,er,de,ye,yy,dy,mp;
+  uint8_t dd,mm;static char bf[11];
+  zz=et/86400+719468;er=zz/146097;de=zz-er*146097;
+  ye=(de-de/1460+de/36524-de/146096)/365;yy=ye+er*400;
+  dy=de-(365*ye+ye/4-ye/100);mp=(5*dy+2)/153;
+  dd=dy-(153*mp+2)/5+1;mm=mp<10?mp+3:mp-9;yy+=(mm<=2);
+  bf[0]='0'+dd/10;bf[1]='0'+dd%10;bf[2]='-';
+  bf[3]='0'+mm/10;bf[4]='0'+mm%10;bf[5]='-';
+  bf[6]='0'+yy/1000;bf[7]='0'+(yy/100)%10;
+  bf[8]='0'+(yy/10)%10;bf[9]='0'+yy%10;bf[10]='\0';
+  return bf;
 }
 
 const char* getFormattedTime(uint32_t epochTime){
@@ -34,4 +33,3 @@ void main(void){
     printf("Datum: %s\n",getFormattedDate(epochTime+offsetSec));
     printf("Zeit:  %s\n",getFormattedTime(epochTime+offsetSec));
 }
-
