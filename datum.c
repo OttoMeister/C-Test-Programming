@@ -4,18 +4,17 @@
 #include <stdint.h>
 #include <time.h>
 
-#define LEAP_YEAR(Y) (!(Y%4)&&((Y%100)||!(Y%400)))
-const char* getFormattedDate(uint32_t epochTime){
-  static const uint8_t md[]={31,28,31,30,31,30,31,31,30,31,30,31};
-  uint16_t d=epochTime/86400UL,y=1970,ty; 
-  uint8_t m=0,day,mon,tm;
-  for(;d>=(ty=LEAP_YEAR(y)?366:365);d-=ty,y++);
-  for(;m<12&&d>=(tm=m==1&&LEAP_YEAR(y)?29:md[m]);d-=tm,m++);
-  static char buf[11];day=d+1;mon=m+1;
-  buf[0]='0'+day/10;buf[1]='0'+day%10;buf[2]='-';
-  buf[3]='0'+mon/10;buf[4]='0'+mon%10;buf[5]='-';
-  buf[6]='0'+y/1000;buf[7]='0'+(y/100)%10;
-  buf[8]='0'+(y/10)%10;buf[9]='0'+y%10;buf[10]='\0';
+const char* getFormattedDate(uint32_t epochTime) {
+  uint32_t z,era,doe,yoe,y,doy,mp;
+  uint8_t day,mon;static char buf[11];
+  z=epochTime/86400+719468;era=z/146097;doe=z-era*146097;
+  yoe=(doe-doe/1460+doe/36524-doe/146096)/365;y=yoe+era*400;
+  doy=doe-(365*yoe+yoe/4-yoe/100);mp=(5*doy+2)/153;
+  day=doy-(153*mp+2)/5+1;mon=mp<10?mp+3:mp-9;y+=(mon<=2);
+  buf[0]='0'+day/10; buf[1]='0'+day%10; buf[2]='-';
+  buf[3]='0'+mon/10; buf[4]='0'+mon%10; buf[5]='-';
+  buf[6]='0'+y/1000; buf[7]='0'+(y/100)%10;
+  buf[8]='0'+(y/10)%10; buf[9]='0'+y%10; buf[10]='\0';
   return buf;
 }
 
