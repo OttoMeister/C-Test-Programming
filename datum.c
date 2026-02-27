@@ -26,10 +26,18 @@ const char* getFormattedTime(uint32_t epochTime){
   return buf;
 }
 
+const char* getFormattedWeekday(uint32_t t) {
+  // static const char* days[]={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+  static const char* const days[]={"Mo","Di","Mi","Do","Fr","Sa","So"};
+  return days[((t/86400)+3)%7];
+}
+
 void main(void){
-    int32_t offsetSec = -5*3600;
-    uint32_t epochTime=(uint32_t)time(NULL); // linux code
-    printf("Epoch: %u, Offset: %i\n",epochTime,offsetSec);
-    printf("Datum: %s\n",getFormattedDate(epochTime+offsetSec));
-    printf("Zeit:  %s\n",getFormattedTime(epochTime+offsetSec));
+  int32_t offsetSec = -5*3600;
+  uint32_t epochTime=(uint32_t)time(NULL); // linux code
+  printf("Epoch:  %u\n",epochTime);
+  printf("Offset: %i\n",offsetSec);
+  printf("Datum:  %s\n",getFormattedDate(epochTime+offsetSec));
+  printf("Zeit:   %s\n",getFormattedTime(epochTime+offsetSec));
+  printf("Tag:    %s\n",getFormattedWeekday(epochTime+offsetSec));
 }
