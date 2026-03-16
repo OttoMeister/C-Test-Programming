@@ -1,6 +1,7 @@
 Decryp save file from App
 
-App is OI Safe 1.4.6;  org.openintents.safe.apk Passwort: "TestTest" (ohne ")
+App is OI Safe 1.4.6;  org.openintents.safe.apk Passwort: "TestTest" 
+
 https://github.com/openintents/safe/tree/1.4.6.1/Safe
 ```shell
 sudo waydroid shell cat /sdcard/oisafe.xml 
